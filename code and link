@@ -1,0 +1,135 @@
+// Include the Servo library code
+#include <Servo.h>
+Servo servo; //Initialize servo variable
+
+const int trig_Pin = 11;
+const int echo_Pin = 10;
+
+void setup()
+{
+  pinMode(4,OUTPUT);
+  pinMode(5,OUTPUT);
+  pinMode(6,OUTPUT);
+  pinMode(7,OUTPUT);
+  pinMode(trig_Pin, OUTPUT);
+  pinMode(echo_Pin, INPUT);
+  servo.attach(12); //servo is attached to pin 12
+ 
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  servo.write(90); //Rotate the servo through 90 degree
+  delay(1000);
+  float distanceC = getDistance();
+  Serial.print("Distance: ");
+  Serial.println(distanceC);
+  
+  if(distanceC<30){
+    stop();
+    delay(500);
+    backward();
+    delay(600);
+    stop();
+    delay(500);
+    
+    servo.write(45);//Rotate the servo through 45 degree
+    delay(2000);
+    
+    float distanceR = getDistance();
+    Serial.print("RIGHT Distance: ");
+    Serial.println(distanceR);delay(600);
+    
+    servo.write(135); //Rotate the servo through 135 degree
+    delay(2500);
+    
+    float distanceL = getDistance();
+    Serial.print("LEFT Distance: ");
+    Serial.println(distanceL);delay(600);
+    
+    
+    if(distanceR>=distanceL){
+      Serial.print("TAKING RIGHT TURN \n");
+      delay(1000);
+      right();
+      delay(600);
+      stop();
+    }
+    else{
+      Serial.print("TAKING LEFT TURN \n");
+      delay(1000);
+      left();
+      delay(600);
+      stop();
+    }
+    
+  }
+  else{
+    forward();
+  }
+  Serial.print("\n");
+  
+}
+
+int getDistance()
+{
+  //Clear the trig_pin
+  digitalWrite(trig_Pin, LOW);
+  delay(2);
+  //Set the trip_pin on high state for 10 micro seconds
+  digitalWrite(trig_Pin, HIGH);
+  delay(10);
+  digitalWrite(trig_Pin, LOW);
+  
+ /*Set echo_pin on high state to recive the pulse generated from trig_pin.
+   Using the pulseIn()function to read the travel time*/
+  float duration = pulseIn(echo_Pin, HIGH);
+  //Measure the distance
+  float distance = duration*0.034/2;
+  return distance;
+}
+
+void forward()
+{
+  digitalWrite(4,0);
+  digitalWrite(5,1);
+  digitalWrite(6,0);
+  digitalWrite(7,1);
+}
+
+void backward()
+{
+  digitalWrite(4,1);
+  digitalWrite(5,0);
+  digitalWrite(6,1);
+  digitalWrite(7,0);
+}
+
+void right()
+{
+  digitalWrite(4,0);
+  digitalWrite(5,1);
+  digitalWrite(6,1);
+  digitalWrite(7,0);
+}
+
+void left()
+{
+  digitalWrite(4,1);
+  digitalWrite(5,0);
+  digitalWrite(6,0);
+  digitalWrite(7,1);
+}
+
+void stop()
+{
+  digitalWrite(4,0);
+  digitalWrite(5,0);
+  digitalWrite(6,0);
+  digitalWrite(7,0);
+}
+
+
+
+thinker cad link :-https://www.tinkercad.com/embed/5D6y5NCtXFG?editbtn=1
