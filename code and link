@@ -1,3 +1,5 @@
+thinker cad link :-https://www.tinkercad.com/embed/5D6y5NCtXFG?editbtn=1
+
 // Include the Servo library code
 #include <Servo.h>
 Servo servo; //Initialize servo variable
@@ -132,4 +134,4 @@ void stop()
 
 
 
-thinker cad link :-https://www.tinkercad.com/embed/5D6y5NCtXFG?editbtn=1
+
